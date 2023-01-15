@@ -26,11 +26,13 @@ def main():
 
             if up_fingers[1]:
                 # scroll up
-                pyautogui.scroll(2)
+                # pyautogui.time.sleep(1)
+                pyautogui.scroll(1)
 
             if not up_fingers[1]:
                 # scroll down
-                pyautogui.scroll(-2)
+                # pyautogui.time.sleep(1)
+                pyautogui.scroll(-1)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             video_capture.release()
