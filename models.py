@@ -1,4 +1,5 @@
 import cv2
+import pyautogui
 import mediapipe as mp
 
 
@@ -6,18 +7,19 @@ class HandDetector:
 
     def __init__(self, mode=False, max_hands=2, min_detection=0.5, model_complexity=1, min_track=0.5):
         self.mode = mode
+        self.results = None
+        self.fingers_up = None
+        self.min_track = min_track
         self.max_hands = max_hands
         self.min_detection = min_detection
-        self.min_track = min_track
         self.model_complexity = model_complexity
-        self.results = None
 
         self.mp_hands = mp.solutions.hands
+        self.mp_draw = mp.solutions.drawing_utils
         self.hands = self.mp_hands.Hands(self.mode, self.max_hands, self.model_complexity,
                                          self.min_detection, self.min_track)
-        self.mp_draw = mp.solutions.drawing_utils
 
-    def find_hands(self, img, draw=True):
+    def find_hands(self, img, draw=False):
 
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
@@ -30,7 +32,7 @@ class HandDetector:
 
         return img
 
-    def find_position(self, img, hand_no=0, draw=True):
+    def find_position(self, img, hand_no=0, draw=False):
 
         landmark_list = []
         if self.results.multi_hand_landmarks:
@@ -41,6 +43,24 @@ class HandDetector:
                 landmark_list.append([index, cx, cy])
                 if draw:
                     cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
-                # self.mp_draw.draw_landmarks(img, my_hand, self.mp_hands.HAND_CONNECTIONS)
 
         return landmark_list
+
+    def get_up_fingers(self, img):
+
+        pos = self.find_position(img, draw=False)
+
+        self.fingers_up = []
+        if pos:
+            # thumb
+            self.fingers_up.append(not(pos[4][1] < pos[3][1] and (pos[5][0] - pos[4][0] > 10)))
+            # index
+            self.fingers_up.append(not(pos[8][1] < pos[7][1] < pos[6][1]))
+            # middle
+            self.fingers_up.append(not(pos[12][1] < pos[11][1] < pos[10][1]))
+            # ring
+            self.fingers_up.append(not(pos[16][1] < pos[15][1] < pos[14][1]))
+            # pinky
+            self.fingers_up.append(not(pos[20][1] < pos[19][1] < pos[18][1]))
+
+        return self.fingers_up

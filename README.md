@@ -1,1 +1,1 @@
-# Two-Finger-Scroll-
+# Finger-Scroll
