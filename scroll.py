@@ -36,42 +36,40 @@ def main():
 
             speed_x, speed_y = moves(theta, length=10)
 
-            print(speed_x, speed_y)
-
             if speed_x >= 0:
-                if keys['left']:
+                if keys['left']:  # release left key
                     pyautogui.keyUp('left')
                     keys['left'] = False
-                if not keys['right']:
+                if not keys['right']:  # press right key
                     pyautogui.keyDown('right')
                     keys['right'] = True
 
             if speed_x < 0:
-                if keys['right']:
+                if keys['right']:  # release right key
                     pyautogui.keyUp('right')
                     keys['right'] = False
-                if not keys['left']:
+                if not keys['left']:  # press left key
                     pyautogui.keyDown('left')
                     keys['left'] = True
 
             if speed_y >= 0:
-                if keys['down']:
+                if keys['down']:  # release down key
                     pyautogui.keyUp('down')
                     keys['down'] = False
-                if not keys['up']:
+                if not keys['up']:  # press up key
                     pyautogui.keyDown('up')
                     keys['up'] = True
 
             if speed_y < 0:
-                if keys['up']:
+                if keys['up']:  # release up key
                     pyautogui.keyUp('up')
                     keys['up'] = False
-                if not keys['down']:
+                if not keys['down']:  # press down key
                     pyautogui.keyDown('down')
                     keys['down'] = True
 
         else:
-            # Release keys
+            # Release all keys
             if keys['up']:
                 pyautogui.keyUp('up')
                 keys['up'] = False
@@ -89,7 +87,7 @@ def main():
             video_capture.release()
             break
 
-    # When everything is done, release the capture
+    # Release the capture
     video_capture.release()
 
 

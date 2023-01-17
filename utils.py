@@ -18,8 +18,4 @@ def get_angle(detection):
 
     theta = -np.degrees(np.arctan2(yd-yp, xd-xp))
 
-    # if theta < 0:
-    #     return 360 + theta
-    # else:
-    #     return theta
     return theta

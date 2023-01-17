@@ -68,23 +68,3 @@ class HandDetector:
 
         return self.fingers_up
 
-    def get_direction(self, img):
-
-        pos = self.find_position(img, draw=False)
-
-        return pos
-
-        # if not pos:
-        #     return None
-        #
-        # # index
-        # index_x = pos[8][1]
-        # index_y = pos[8][2]
-        #
-        # # wrist
-        # wrist_x = pos[5][1]
-        # wrist_y = pos[5][2]
-        #
-        # # return index_x, index_y, wrist_x, wrist_y
-        # return pos[8]
-
