@@ -36,11 +36,14 @@ class HandDetector:
 
         landmark_list = []
         if self.results.multi_hand_landmarks:
+
             my_hand = self.results.multi_hand_landmarks[hand_no]
+
             for index, lm in enumerate(my_hand.landmark):
                 height, width, channel = img.shape
                 cx, cy = int(lm.x * width), int(lm.y * height)
                 landmark_list.append([index, cx, cy])
+
                 if draw:
                     cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
 
@@ -53,14 +56,35 @@ class HandDetector:
         self.fingers_up = []
         if pos:
             # thumb
-            self.fingers_up.append(not(pos[4][1] < pos[3][1] and (pos[5][0] - pos[4][0] > 10)))
+            self.fingers_up.append(pos[4][1] < pos[3][1] and (pos[5][0] - pos[4][0] > 10))
             # index
-            self.fingers_up.append(not(pos[8][1] < pos[7][1] < pos[6][1]))
+            self.fingers_up.append(pos[8][1] < pos[7][1] < pos[6][1])
             # middle
-            self.fingers_up.append(not(pos[12][1] < pos[11][1] < pos[10][1]))
+            self.fingers_up.append(pos[12][1] < pos[11][1] < pos[10][1])
             # ring
-            self.fingers_up.append(not(pos[16][1] < pos[15][1] < pos[14][1]))
+            self.fingers_up.append(pos[16][1] < pos[15][1] < pos[14][1])
             # pinky
-            self.fingers_up.append(not(pos[20][1] < pos[19][1] < pos[18][1]))
+            self.fingers_up.append(pos[20][1] < pos[19][1] < pos[18][1])
 
         return self.fingers_up
+
+    def get_direction(self, img):
+
+        pos = self.find_position(img, draw=False)
+
+        return pos
+
+        # if not pos:
+        #     return None
+        #
+        # # index
+        # index_x = pos[8][1]
+        # index_y = pos[8][2]
+        #
+        # # wrist
+        # wrist_x = pos[5][1]
+        # wrist_y = pos[5][2]
+        #
+        # # return index_x, index_y, wrist_x, wrist_y
+        # return pos[8]
+
